@@ -1,0 +1,26 @@
+services:
+  database:
+    image: 'postgres:16.3'
+    container_name: fullstack-database
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: senha
+      POSTGRES_DB: db_postgres
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  server:
+    build: .
+    container_name: FilaSQS
+    ports:
+      - "3001:3001"
+    depends_on: 
+      - database   
+    environment:  
+      DATABASE_URL: postgresql://usuario:senha@database:5432/db_postgres?schema=public
+
+volumes:
+  postgres-data:   
